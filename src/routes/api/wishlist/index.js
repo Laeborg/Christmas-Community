@@ -11,7 +11,7 @@ module.exports = ({ db }) => {
 
   router.post('/:user/:itemId/move/:direction', async (req, res) => {
     try {
-      if (req.user._id !== req.params.user) {
+      if (req.user.admin && req.user._id !== req.params.user) {
         throw new Error(_CC.lang('WISHLIST_MOVE_GUARD'))
       }
 
