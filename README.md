@@ -49,6 +49,10 @@ services:
       # (for weddings, birthdays, etc. only the admin account's list is accessible)
       # Set to 'true' to enable
       SINGLE_LIST: 'false'
+      # Some websites (like walmart) send headers that are larger than 8MB in
+      # length. If issues are encountered, set the node.js limit to a higher
+      # number than 8192
+      #NODE_OPTIONS: "--max-http-header-size=32768"
     restart: always
 ```
 
@@ -93,6 +97,9 @@ UPDATE_CHECK=true
 PFP=true
 # Language of the interface, options listed in `languages` directory
 LANGUAGE=en-US
+# Password to enter guest mode,
+# e.g. https://wishes.example.com?pw=ReplaceWithYourGuestPassword
+# GUEST_PASSWORD=ReplaceWithYourGuestPassword
 
 ## Wishlist Settings
 # Set to true to not allow users to have their own lists. You may want this for a birthday or wedding.
