@@ -48,6 +48,7 @@ module.exports = (db) => {
   }
 
   router.get('/:user', publicRoute(), redirectIfSingleUserMode, async (req, res) => {
+    console.log(req);
     try {
       const wishlist = await wishlistManager.get(req.params.user)
       const items = await wishlist.itemsVisibleToUser(req.user._id)
