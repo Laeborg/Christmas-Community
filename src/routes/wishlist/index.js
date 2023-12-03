@@ -48,7 +48,6 @@ module.exports = (db) => {
   }
 
   router.get('/:user', publicRoute(), redirectIfSingleUserMode, async (req, res) => {
-    console.log(req);
     try {
       const wishlist = await wishlistManager.get(req.params.user)
       const items = await wishlist.itemsVisibleToUser(req.user._id)
@@ -117,7 +116,7 @@ module.exports = (db) => {
       const item = await wishlist.get(req.params.itemId)
 
       const pledgedByUser = item.pledgedBy === req.user._id
-      if (!pledgedByUser) {
+      if (!req.user.admin || !pledgedByUser) {
         throw new Error(_CC.lang('WISHLIST_UNPLEDGE_GUARD'))
       }
 
@@ -138,7 +137,7 @@ module.exports = (db) => {
 
       const isOwnWishlist = req.user._id === wishlist.username
       const addedByUser = item.addedBy === req.user._id
-      if (!isOwnWishlist && !addedByUser) {
+      if (!req.user.admin || !isOwnWishlist && !addedByUser) {
         throw new Error(_CC.lang('WISHLIST_REMOVE_GUARD'))
       }
 
@@ -154,7 +153,7 @@ module.exports = (db) => {
 
   router.post('/:user/move/:direction/:itemId', verifyAuth(), async (req, res) => {
     try {
-      if (req.user._id !== req.params.user) {
+      if (!req.user.admin || req.user._id !== req.params.user) {
         throw new Error(_CC.lang('WISHLIST_MOVE_GUARD'))
       }
 
@@ -196,7 +195,7 @@ module.exports = (db) => {
 
       const isOwnWishlist = req.user._id === req.params.user
       const addedByUser = req.user._id === item.addedBy
-      if (!isOwnWishlist && !addedByUser) {
+      if (!req.user.admin || !isOwnWishlist && !addedByUser) {
         throw new Error(_CC.lang('NOTE_GUARD'))
       }
 
@@ -217,7 +216,7 @@ module.exports = (db) => {
 
       const isOwnWishlist = req.user._id === req.params.user
       const addedByUser = req.user._id === item.addedBy
-      if (!isOwnWishlist && !addedByUser) {
+      if (!req.user.admin || !isOwnWishlist && !addedByUser) {
         throw new Error(_CC.lang('WISHLIST_REFRESH_GUARD'))
       }
 
